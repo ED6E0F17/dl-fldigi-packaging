@@ -233,7 +233,7 @@ class Builder:
 
     def build_all(self):
         self.item("pthreadsw32", "2.8.0")
-        self.item("zlib", "1.2.7")
+        self.item("zlib", "1.2.8")
         self.item("libpng", "1.5.12")
         self.item("libjpeg", "6b")
         self.item("fltk", "1.3.0")
@@ -434,10 +434,10 @@ class Builder:
                    self.loc("items", "pthreadsw32", "lib", "libpthread.a"))
 
     def zlib(self):
-        self.download_source("http://zlib.net/zlib-1.2.7.tar.gz",
+        self.download_source("http://zlib.net/zlib-1.2.8.tar.gz",
             "zlib.tar.gz",
-            "b1c073ad26684e354f7c522c14655840592e03872bc0a94690f89cae2ff88f14"
-            "6fce1dad252ff27a889dac4a32ff9f8ab63ba940671f9da89e9ba3e19f1bf58d")
+            "ece209d4c7ec0cb58ede791444dc754e0d10811cbbdebe3df61c0fd9f9f9867c"
+            "1c3ccd5f1827f847c005e24eef34fb5bf87b5d3f894d75da04f1797538290e4a")
         self.extract_source_tar("zlib.tar.gz")
 
         env = os.environ.copy()
