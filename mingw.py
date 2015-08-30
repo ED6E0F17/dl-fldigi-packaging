@@ -715,9 +715,10 @@ class Builder:
     def mingw_fakepath(self):
         for n in ["addr2line", "ar", "as", "c++", "cc", "c++filt", "cpp",
                   "dlltool", "dllwrap", "g++", "gcc", "gccbug",
-                  "gcov", "gfortran", "gprof", "ld", "nm", "objcopy",
+                  "gcov", "gprof", "ld", "nm", "objcopy",
                   "objdump", "ranlib", "readelf", "size", "strings",
                   "strip", "windmc", "windres"]:
+			#"gfortran", 
             target_name = MINGW_NAME + "-" + n
             os.symlink(self.find_path(target_name),
                        self.loc("items", "mingw_fakepath", n))
