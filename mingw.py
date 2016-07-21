@@ -674,7 +674,8 @@ class Builder:
         self.copy_pkgconfig("hamlib", "hamlib.pc")
 
     def openssl(self):
-        self.download_source("http://www.openssl.org/source/"
+        self.download_source(
+            "http://mirrors.ibiblio.org/openssl/source/old/1.0.1/"
             "openssl-1.0.1c.tar.gz", "openssl.tar.gz",
             "14f766daab0828a2f07c65d6da8469a4a5a2b839ff3da188538c4e2db3e3e2f3"
             "7217fb37e269617fb438463b75fb77dab0b155f36831ff48edbc9e7f2903ebd3")
@@ -718,7 +719,7 @@ class Builder:
                   "gcov", "gprof", "ld", "nm", "objcopy",
                   "objdump", "ranlib", "readelf", "size", "strings",
                   "strip", "windmc", "windres"]:
-			#"gfortran", 
+			#"gfortran",
             target_name = MINGW_NAME + "-" + n
             os.symlink(self.find_path(target_name),
                        self.loc("items", "mingw_fakepath", n))
