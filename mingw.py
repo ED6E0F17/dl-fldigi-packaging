@@ -245,7 +245,7 @@ class Builder:
         self.item("libtool", "2.4.2")
         self.item("libusb", "1.2.6.0")
         self.item("hamlib", "1.2.14")
-        self.item("openssl", "1.0.1c")
+        self.item("openssl", "1.0.2h")
         self.item("curl", "7.27.0")
         self.item("mingw_fakepath", "1")
         self.item("dl_fldigi", None)
@@ -675,10 +675,10 @@ class Builder:
 
     def openssl(self):
         self.download_source(
-            "http://mirrors.ibiblio.org/openssl/source/old/1.0.1/"
-            "openssl-1.0.1c.tar.gz", "openssl.tar.gz",
-            "14f766daab0828a2f07c65d6da8469a4a5a2b839ff3da188538c4e2db3e3e2f3"
-            "7217fb37e269617fb438463b75fb77dab0b155f36831ff48edbc9e7f2903ebd3")
+            "http://mirrors.ibiblio.org/openssl/source/"
+            "openssl-1.0.2h.tar.gz", "openssl.tar.gz",
+            "780601f6f3f32f42b6d7bbc4c593db39a3575f9db80294a10a68b2b0bb79448d"
+            "9bd529ca700b9977354cbdfc65887c76af0aa7b90d3ee421f74ab53e6f15c303")
         self.extract_source_tar("openssl.tar.gz")
 
         self.src_cmd("/bin/bash", "./Configure", "mingw",
