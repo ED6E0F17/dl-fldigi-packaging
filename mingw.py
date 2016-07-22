@@ -232,7 +232,7 @@ class Builder:
             self.clean_temp()
 
     def build_all(self):
-        self.item("pthreadsw32", "2.9.1")
+        self.item("pthreadsw32", "2.8.0")
         self.item("zlib", "1.2.8")
         self.item("libpng", "1.5.12")
         self.item("libjpeg", "6b")
@@ -413,9 +413,9 @@ class Builder:
 
     def pthreadsw32(self):
         self.download_source("ftp://sourceware.org/pub/pthreads-win32/"
-            "pthreads-w32-2-9-1-release.tar.gz", "pthreadsw32.tar.gz",
-            "9c06e85310766834370c3dceb83faafd397da18a32411ca7645c8eb6b9495fea"
-            "54ca2872f4a3e8d83cb5fdc5dea7f3f0464be5bb9af3222a6534574a184bd551")
+            "pthreads-w32-2-8-0-release.tar.gz", "pthreadsw32.tar.gz",
+            "d86040b18641b52f2de81468e06e2885d0f0ed47cc5c9c90ca33614ed53ddd60"
+            "167723b46eb477d905ad69f93b6b9002762589ba6c351f78a8041109cdbf287e")
         self.extract_source_tar("pthreadsw32.tar.gz")
         self.make("CROSS=" + MINGW_NAME + "-", "clean", "GC-inlined")
 
