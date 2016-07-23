@@ -745,7 +745,7 @@ class Builder:
                    "XMLRPC_C_CONFIG=" + self.loc("items", "xmlrpc", "bin",
                                                  "xmlrpc-c-config"),
                    "X_CFLAGS=-DXMD_H", # Inhibit libjpeg crud
-                   "LIBS=-lltdl",
+                   "LIBS=-lltdl -lcrypto",
                    flag_items=["libjpeg", "zlib", "openssl", "libtool"],
                    env=env,
                    *STD_CONFIGURE)
