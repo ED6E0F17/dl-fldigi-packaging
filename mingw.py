@@ -236,7 +236,7 @@ class Builder:
         self.item("zlib", "1.2.8")
         self.item("libpng", "1.5.12")
         self.item("libjpeg", "6b")
-        self.item("fltk", "1.3.0")
+        self.item("fltk", "1.3.3")
         self.item("directx_devel", "3")
         self.item("portaudio", "v19_20111121")
         self.item("samplerate", "0.1.8")
@@ -488,10 +488,10 @@ class Builder:
         self.make("install-lib")
 
     def fltk(self):
-        self.download_source("http://fltk.org/pub/fltk/1.3.0/"
-            "fltk-1.3.0-source.tar.gz", "fltk.tar.gz",
-            "a7adf9def90b143bc7ff54ac82fe9f6812b49209ab4145aada45210a3c314f9d"
-            "91ae413240a8c57492826eca011aa147c68a131a9fe20bf221e7bc70c6c908ee")
+        self.download_source("http://fltk.org/pub/fltk/1.3.3/"
+            "fltk-1.3.3-source.tar.gz", "fltk.tar.gz",
+            "277ba27e35c20e2d4fc5296bf418c5ab78c821870476e21d49f723765b99b3a5"
+            "59eed4ecd5215ac26d53a1091ada003e17f1553194cebaa97dd854809dd2885d")
         self.extract_source_tar("fltk.tar.gz")
         with open(self.eloc("mingw-fltk.patch")) as p:
             self.src_cmd("patch", "-p1", stdin=p)
