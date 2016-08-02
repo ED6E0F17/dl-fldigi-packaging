@@ -744,7 +744,7 @@ class Builder:
                                              "fltk-config"),
                    "XMLRPC_C_CONFIG=" + self.loc("items", "xmlrpc", "bin",
                                                  "xmlrpc-c-config"),
-                   "X_CFLAGS=-DXMD_H", # Inhibit libjpeg crud
+                   "X_CFLAGS=-DXMD_H -DHAVE_BOOLEAN", # Inhibit libjpeg crud
                    "LIBS=-lltdl -lcrypto",
                    flag_items=["libjpeg", "zlib", "openssl", "libtool"],
                    env=env,
