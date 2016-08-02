@@ -107,8 +107,7 @@ class Builder:
             self.find_path("lsb_release")
         except:
             logger.warning("Unable to determine linux distro.")
-            logger.warning("This script has been tested on Ubuntu lucid "
-                           "and Debian squeeze")
+            logger.warning("This script has been tested on Debian wheezy")
             return
 
         (r, w) = os.pipe()
@@ -122,10 +121,9 @@ class Builder:
 
         logger.debug("LSB release: " + line)
 
-        if not ("Ubuntu" in line and "10.04" in line) and \
-           not ("Debian" in line and "squeeze" in line):
-            logger.warning("This script has been tested on Ubuntu lucid "
-                           "and Debian squeeze only!")
+        if not ("Debian" in line and "wheezy" in line):
+            logger.warning("This script has been tested on Debian wheezy "
+                           "only!")
 
     def find_path(self, name):
         for d in os.environ["PATH"].split(":"):
