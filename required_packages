@@ -1,12 +1,17 @@
-Tested on Ubuntu 10.04 lucid and Debian squeeze only.
+Tested on Debian Jessie for Linux package build. Windows(mingw) needs Debian Wheezy.
 
 build-essential python git-core autoconf scons
 
-debian build:
-  debhelper libfltk1.3-dev libhamlib-dev libjpeg62-dev libxft-dev
+Debian build:
+  debhelper libfltk1.3-dev libhamlib-dev libjpeg62-turbo-dev libxft-dev
   libpng-dev zlib1g-dev libexpat-dev portaudio19-dev libsndfile-dev
-  libsamplerate-dev libcurl4-openssl-dev | libcurl4-gnutls-dev libpulse-dev
-  libxmlrpc-c3-dev cdbs quilt libssl-dev libpulse-dev devscripts
+  libsamplerate-dev { libcurl4-openssl-dev OR libcurl4-gnutls-dev }
+  libxmlrpc-core-c3-dev cdbs quilt libssl-dev libpulse-dev devscripts
 
-windows build:
-  gcc-mingw32 mingw32-runtime mingw32 nsis unzip
+NB: the OpenSSL licence conflicts with the GPL. Consider using GNU TLS.
+
+
+
+Cross-compile for Windows on Debian Wheezy needs:
+  mingw32-runtime nsis unzip
+

@@ -174,8 +174,7 @@ class Builder:
 
         logger.info("Git commit is " + self.git)
 
-        self.origname = "dl-fldigi_" + self.version + "." + \
-                self.git + ".orig.tar.gz"
+        self.origname = "dl-fldigi_" + self.version + ".orig.tar.gz"
         logger.info("Orig tarball is " + self.origname)
 
         shutil.copy(self.loc("git-tmp", distname),
@@ -183,7 +182,7 @@ class Builder:
         shutil.rmtree(self.loc("git-tmp"))
 
     def add_debian_dir(self):
-        self.debsrc = "dl-fldigi-" + self.version + "." + self.git
+        self.debsrc = "dl-fldigi-" + self.version + "-" + self.git
         t = self.loc(self.debsrc)
 
         os.mkdir(t)
@@ -203,7 +202,7 @@ class Builder:
         if not distro:
             distro = self.default_distro()
 
-        changelog = changelog.format(version=self.version + "." + self.git,
+        changelog = changelog.format(version=self.version + "-" + self.git,
                                      distro=distro, commit=self.git,
                                      date=email.utils.formatdate())
 
@@ -221,7 +220,7 @@ class Builder:
         self.cmd("debuild", "-uc", "-us", *args, cwd=self.loc(self.debsrc))
 
     def get_files(self):
-        prefix = "dl-fldigi_" + self.version + "." + self.git
+        prefix = "dl-fldigi_" + self.version + "-" + self.git
 
         if self.options["get_src"]:
             files = [prefix + ".orig.tar.gz", prefix + ".debian.tar.gz",
