@@ -1,12 +1,16 @@
-Tested on Ubuntu 10.04 lucid and Debian squeeze only.
+Tested on Ubuntu 16.04
 
 build-essential python git-core autoconf scons
 
-debian build:
-  debhelper libfltk1.3-dev libhamlib-dev libjpeg62-dev libxft-dev
-  libpng-dev zlib1g-dev libexpat-dev portaudio19-dev libsndfile-dev
-  libsamplerate-dev libcurl4-openssl-dev | libcurl4-gnutls-dev libpulse-dev
-  libxmlrpc-c3-dev cdbs quilt libssl-dev libpulse-dev devscripts
+Debian/Ubuntu build:
+  debhelper libfltk1.3-dev libhamlib-dev libxft-dev
+  libpng-dev zlib1g-dev libexpat-dev portaudio19-dev
+  libsamplerate-dev libxmlrpc-core-c3-dev libsndfile-dev
+  cdbs quilt libssl-dev libpulse-dev devscripts
+  libcurl4-openssl-dev OR  libcurl4-gnutls-dev
+  libjpeg62-turbo-dev OR libjpeg8-dev
 
-windows build:
-  gcc-mingw32 mingw32-runtime mingw32 nsis unzip
+NB: the OpenSSL licence conflicts with the GPL. Consider using GNU TLS.
+
+(broken)Windows build on Debian/Ubuntu:
+  mingw-w64 nsis unzip

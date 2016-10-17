@@ -19,8 +19,8 @@ import glob
 
 logger = logging.getLogger("builder")
 
-MINGW_NAME = "i586-mingw32msvc"
-STD_CONFIGURE = ["--build=i686-pc-linux-gnu", "--host=" + MINGW_NAME,
+MINGW_NAME = "i686-w64-mingw32"
+STD_CONFIGURE = ["--build=x86_64-linux-gnu", "--host=" + MINGW_NAME,
                  "--enable-static", "--disable-shared"]
 
 class Builder:
@@ -107,23 +107,20 @@ class Builder:
             self.find_path("lsb_release")
         except:
             logger.warning("Unable to determine linux distro.")
-            logger.warning("This script has been tested on Debian wheezy")
+            logger.warning("This script is broken for W64 API.")
             return
 
         (r, w) = os.pipe()
         read = os.fdopen(r)
 
-        subprocess.call(("lsb_release", "-d"), stdout=w)
+        subprocess.call(("lsb_release", "-ds"), stdout=w)
         os.close(w)
 
         line = read.read().strip()
         read.close()
 
-        logger.debug("LSB release: " + line)
-
-        if not ("Debian" in line and "wheezy" in line):
-            logger.warning("This script has been tested on Debian wheezy "
-                           "only!")
+        logger.warning("OS: " + line)
+        logger.warning("This script is broken for W64 API.")
 
     def find_path(self, name):
         for d in os.environ["PATH"].split(":"):
@@ -243,7 +240,7 @@ class Builder:
         self.item("libtool", "2.4.2")
         self.item("libusb", "1.2.6.0")
         self.item("hamlib", "1.2.14")
-        self.item("openssl", "1.0.2h")
+        self.item("openssl", "1.0.2i")
         self.item("curl", "7.27.0")
         self.item("mingw_fakepath", "1")
         self.item("dl_fldigi", None)
@@ -415,6 +412,9 @@ class Builder:
             "9c06e85310766834370c3dceb83faafd397da18a32411ca7645c8eb6b9495fea"
             "54ca2872f4a3e8d83cb5fdc5dea7f3f0464be5bb9af3222a6534574a184bd551")
         self.extract_source_tar("pthreadsw32.tar.gz")
+        with open(self.eloc("pthreads-w32.patch")) as p:
+            self.src_cmd("patch", "-p1", stdin=p)
+
         self.make("CROSS=" + MINGW_NAME + "-", "clean", "GC-inlined")
 
         for d in ["include", "lib"]:
@@ -605,12 +605,11 @@ class Builder:
 
         with open(self.eloc("libusb.patch")) as p:
             self.src_cmd("patch", "-p1", stdin=p)
-
-        self.make("host_prefix=i586-mingw32msvc", "dll")
+        self.make("host_prefix=" + MINGW_NAME, "dll")
         os.unlink(self.loc("temp", "src", "libusb.a"))
-        self.src_cmd("i586-mingw32msvc-ar", "rcs", "libusb.a",
+        self.src_cmd(MINGW_NAME + "-ar", "rcs", "libusb.a",
                      *glob.glob(self.loc("temp", "src", "*.2.o")))
-        self.src_cmd("i586-mingw32msvc-ranlib", "libusb.a")
+        self.src_cmd(MINGW_NAME + "-ranlib", "libusb.a")
 
         os.mkdir(self.loc("items", "libusb", "include"))
         os.mkdir(self.loc("items", "libusb", "lib"))
@@ -656,7 +655,7 @@ class Builder:
         self.src_cmd("sed", "-i", "s/^int usleep/\/\//",
                      "lib/win32termios.h") # int != long
         os.mkdir(self.loc("temp", "src", "libltdl"))
-        self.make("DEFS=-DHAVE_SLEEP -DHAVE_CONFIG_H")
+        self.make("DEFS=-DHAVE_SLEEP -DHAVE_CONFIG_H -DHAVE_GETADDRINFO")
         self.make("install")
 
         fn = self.loc("items", "hamlib", "lib", "pkgconfig", "hamlib.pc")
@@ -673,10 +672,10 @@ class Builder:
 
     def openssl(self):
         self.download_source(
-            "http://mirrors.ibiblio.org/openssl/source/"
-            "openssl-1.0.2h.tar.gz", "openssl.tar.gz",
-            "780601f6f3f32f42b6d7bbc4c593db39a3575f9db80294a10a68b2b0bb79448d"
-            "9bd529ca700b9977354cbdfc65887c76af0aa7b90d3ee421f74ab53e6f15c303")
+            "http://mirrors.ibiblio.org/openssl/source/old/1.0.2/"
+            "openssl-1.0.2i.tar.gz", "openssl.tar.gz",
+            "41764debd5d64e4e770945f30d682e2c887d9cefb39b358c5c7f9d2cdce34393"
+            "ed28d49b24e95c4639db2df01c278cbcde71bed2b03f9aafafc76766b03850e3")
         self.extract_source_tar("openssl.tar.gz")
 
         self.src_cmd("/bin/bash", "./Configure", "mingw",
@@ -712,12 +711,11 @@ class Builder:
         shutil.rmtree(self.loc("items", "curl", "share"))
 
     def mingw_fakepath(self):
-        for n in ["addr2line", "ar", "as", "c++", "cc", "c++filt", "cpp",
-                  "dlltool", "dllwrap", "g++", "gcc", "gccbug",
+        for n in ["addr2line", "ar", "as", "c++", "c++filt", "cpp",
+                  "dlltool", "dllwrap", "g++",
                   "gcov", "gprof", "ld", "nm", "objcopy",
                   "objdump", "ranlib", "readelf", "size", "strings",
                   "strip", "windmc", "windres"]:
-			#"gfortran",
             target_name = MINGW_NAME + "-" + n
             os.symlink(self.find_path(target_name),
                        self.loc("items", "mingw_fakepath", n))
@@ -744,12 +742,17 @@ class Builder:
                                                  "xmlrpc-c-config"),
                    "X_CFLAGS=-DXMD_H -DHAVE_BOOLEAN", # Inhibit libjpeg crud
                    "LIBS=-lltdl -lcrypto -lws2_32",
+                   "CXXFLAGS=" + "-Wl,-Bstatic",
+                   "CFLAGS=" + "-Wl,-Bstatic",
                    flag_items=["libjpeg", "zlib", "openssl", "libtool"],
                    env=env,
                    *STD_CONFIGURE)
         self.make()
 
         self.make("hamlib-static", env=env)
+
+        shutil.copy(self.eloc("mingwm10.dll"),
+                    self.loc("temp", "src", "src"))
         self.make("nsisinst")
 
         search = glob.glob(self.loc("temp", "src", "src",

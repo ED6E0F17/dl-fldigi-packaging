@@ -1,0 +1,23 @@
+Common subdirectories: pthreads-w32-2-9-1-release-orig/manual and pthreads-w32-2-9-1-release/manual
+diff -u pthreads-w32-2-9-1-release-orig/semaphore.h pthreads-w32-2-9-1-release/semaphore.h
+--- pthreads-w32-2-9-1-release-orig/semaphore.h	2016-10-26 17:15:59.539961592 +0100
++++ pthreads-w32-2-9-1-release/semaphore.h	2016-10-26 17:26:39.583283194 +0100
+@@ -123,7 +123,7 @@
+ #endif				/* __cplusplus */
+ 
+ #if !defined(HAVE_MODE_T)
+-typedef unsigned int mode_t;
++typedef unsigned short mode_t; /*  /usr/i686-w64-mingw32/include/semaphore.h:47  */
+ #endif
+ 
+ 
+@@ -149,7 +149,7 @@
+ 
+ PTW32_DLLPORT int __cdecl sem_open (const char * name,
+ 			    int oflag,
+-			    mode_t mode,
++			    unsigned short mode, /* mode_t mode, */
+ 			    unsigned int value);
+ 
+ PTW32_DLLPORT int __cdecl sem_close (sem_t * sem);
+Common subdirectories: pthreads-w32-2-9-1-release-orig/tests and pthreads-w32-2-9-1-release/tests
